@@ -251,59 +251,60 @@ html:not(.app-ready) .menu-credits{animation:fade-up .8s ease .75s both}
   .mc-dpad{bottom:10px;left:10px}
   .mc-jump{bottom:10px;right:10px}
 }
+
+.menu-lang-row{display:flex;gap:8px;justify-content:center;margin-top:6px}
+.lang-btn{font-family:var(--font-ui);font-size:.72rem;font-weight:600;padding:6px 13px;border:1px solid var(--line);border-radius:var(--r-pill);cursor:pointer;background:var(--surface);color:var(--muted);transition:all .2s;-webkit-tap-highlight-color:transparent}
+.lang-btn:hover{background:var(--surface2);color:var(--ink);border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
+.lang-btn.active{background:rgba(52,211,153,.15);color:var(--mint);border-color:var(--mint)}
 </style>
 </head>
 <body>
 <div id="screen-transition"></div>
 <div class="grain" aria-hidden="true"></div>
 
-<!-- ============================================================
-     TELA: MENU PRINCIPAL
-     ============================================================ -->
 <div id="screen-menu" class="screen active">
   <canvas id="menu-canvas"></canvas>
   <div class="menu-vignette"></div>
   <div class="menu-wrap">
-    <div class="menu-eyebrow">Culminância Escolar &middot; 2026</div>
+    <div class="menu-eyebrow" id="menu-eyebrow">Culminância Escolar &middot; 2026</div>
     <h1 class="menu-logo">Bio<span>Quest</span></h1>
-    <p class="menu-tagline">Uma jornada interativa pelo <strong>corpo humano</strong>, a <strong>evolução da vida</strong> e os limites da <strong>tecnologia</strong>.</p>
+    <p class="menu-tagline" id="menu-tagline">Uma jornada interativa pelo <strong>corpo humano</strong>, a <strong>evolução da vida</strong> e os limites da <strong>tecnologia</strong>.</p>
     <div class="phase-preview">
-      <div class="phase-card pc-1"><span class="pc-ico">🫀</span><span class="pc-name">Corpo Humano</span></div>
-      <div class="phase-card pc-2"><span class="pc-ico">🦴</span><span class="pc-name">Evolução</span></div>
-      <div class="phase-card pc-3"><span class="pc-ico">🤖</span><span class="pc-name">Tecnologia</span></div>
+      <div class="phase-card pc-1"><span class="pc-ico">🫀</span><span class="pc-name" id="pc-name-1">Corpo Humano</span></div>
+      <div class="phase-card pc-2"><span class="pc-ico">🦴</span><span class="pc-name" id="pc-name-2">Evolução</span></div>
+      <div class="phase-card pc-3"><span class="pc-ico">🤖</span><span class="pc-name" id="pc-name-3">Tecnologia</span></div>
     </div>
     <div class="menu-actions">
-      <button class="mbtn mbtn-primary" onclick="startGame()">Jogar agora</button>
+      <button class="mbtn mbtn-primary" id="btn-play" onclick="startGame()">Jogar agora</button>
       <div class="menu-actions-row">
-        <button class="mbtn mbtn-secondary" onclick="showInfo('inst')">Instruções</button>
-        <button class="mbtn mbtn-secondary" onclick="showInfo('cred')">Créditos</button>
+        <button class="mbtn mbtn-secondary" id="btn-inst" onclick="showInfo('inst')">Instruções</button>
+        <button class="mbtn mbtn-secondary" id="btn-cred" onclick="showInfo('cred')">Créditos</button>
       </div>
     </div>
-    <p class="menu-credits">Criado por <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong> — Prof. <strong>Carlos</strong></p>
+    <p class="menu-credits" id="menu-credits">Criado por <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong> — Prof. <strong>Carlos</strong></p>
+    <div class="menu-lang-row">
+      <button class="lang-btn active" id="lang-pt" onclick="setLanguage('pt')" title="Português">🇧🇷 PT</button>
+      <button class="lang-btn" id="lang-en" onclick="setLanguage('en')" title="English">🇺🇸 EN</button>
+      <button class="lang-btn" id="lang-es" onclick="setLanguage('es')" title="Español">🇪🇸 ES</button>
+      <button class="lang-btn" id="lang-ru" onclick="setLanguage('ru')" title="Русский">🇷🇺 RU</button>
+    </div>
   </div>
 </div>
 
-<!-- ============================================================
-     TELA: INSTRUCOES / CREDITOS
-     ============================================================ -->
 <div id="screen-info" class="screen">
   <div class="info-box">
     <h2 id="info-title"></h2>
     <div id="info-body"></div>
     <br>
     <div style="text-align:center">
-      <button class="mbtn mbtn-secondary" style="padding:11px 38px;font-size:.78rem;width:auto" onclick="showScreen('screen-menu')">← Voltar</button>
+      <button class="mbtn mbtn-secondary" style="padding:11px 38px;font-size:.78rem;width:auto" id="btn-back" onclick="showScreen('screen-menu')">← Voltar</button>
     </div>
   </div>
 </div>
 
-<!-- ============================================================
-     TELA: JOGO
-     ============================================================ -->
 <div id="screen-game" class="screen">
   <canvas id="gameCanvas"></canvas>
   <div id="game-vignette"></div>
-  <!-- Sprites GIF (jogador / inimigos / chefe) - posicionados via JS com transform -->
   <img id="spr-ir" class="gif-spr" src="data:image/gif;base64,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">
   <img id="spr-il" class="gif-spr" src="data:image/gif;base64,R0lGODlhQABAAPMAAAAAAKKpR96fR0w+JHx5Mj0zM7VZRY5YL+aQTgAAAAAAAAAAAAAAAAAAAAAAAAAAACH+KEdJRiBjcmVhdGVkIHdpdGggaHR0cHM6Ly9lemdpZi5jb20vbWFrZXIAIf8LTkVUU0NBUEUyLjADAQAAACH5BAkUAAkALAAAAABAAEAAAAT/MMlJq7046827/2A3jANHlmF6DUEboBjrwqoqu++p4y1dgywAgNciGAk34fD1C41aQqILCV32mp8bVEq09nzYFXc8ZoHDEy15zTujWYf4AecN1HHyORNNgSP+CHp2PHctB4CBe3wSfoCCg1tch45Xizd5XVFkmJV8amygbQWeoaU8SAYFo1ifpmyoBqmsrq6wsasqBa20XEYDscC4IAUGAwS8r74GAsy3IcSpxshjR0jM17IfxNcFRtM41crX2MIb29xHyEeq7O3jzeUY59cnx6U6Be/649nmy+M3dklRQ2Kfvn4Z5jEjCEpgQYPw/AEkIhBHxS8QEV5Q+Olij1AD/zLGo8CRYkOQIjWUtHgP5T6NFTjaC0AF5EwyIV+OnCDziMc23qjlPLhTgkIBxpAUoDUi3SlrOlX+AxhyKa+m4XylTDj1nVVkunSMgCgAJsmu476CJRuVKzdu31yoMjiXnER4quLyaNcuFr+iPP8VC6qXiLKuzvwBk1a416+piTlAK9ZYKLDLgM9Sruz4cuQOxH7GPZwq80bR33yx+4F6mq8wrdUhgc251+xZtQ3fbhKb12vcucG5cXIz+G7exWsfR5688nLWTnM/h06Y8/QaSas3HmEpK+fhNrLW1As+fNYnccunyH5erHuHixiJ/70BfvwE7H1mGXg/TTj1FRDUXwgfJ9hQYAgRAAAh+QQJFAAJACwAAAAAQABAAAAE/zDJSau9OOvN7/gDB4ZdaQ5BGpAYqrJm7KnvaNMpLO8JCgC4FGFIcAV+wBWP90n9gqqiM5lbyoxOaJCa01kzWK0Yh/J+K+GxmmY+S1CH+IHGPYrlc6UbHTgg/gh5dnRafoBzbV9wgIGEWYWMeYlMKnhbT2OWVXtva55jk1efo0EDBZxppGtFBgWnZ6mqY6wGrbCypLS1rzwFsbhBQwO1xLwxBbW/wELCBgLPuzLIrQMEy1pEw8/btibI277W18xErNvcxhvf4ETARK7w8efQ6Rjr5yDinzYF8/7n3dQ5w/diVBgQ//wFzHDv2UFPvxAmpCeQIBmIaz5MXHihYRplBf8hbqxHwWMpjCITcqxgko3BfSpJTvCoT8o+faBiaqCZTVU1nMEG6GQ4cNtPU7I+tMMhbKi9okaFFgCmtFy2kTuhnpu6zJcNjViJJuTadaLTjkX7PSN7zdVYtRSzonM1Dke8eLUAyiw50MDPuthoAVxpYVoyoIBpCIZGGK3fxLOGEStWYhpIwM0m70V7uW7mVpvtdR4nDJ6V0deEuUG9TPUtyIFDdWDtrshq2LFv4w66p9puprJnI4Ztu/eQ30KCCz/+u7hx5ridry63+wOnHlaHL1Ne4qdV2mK4d89eBHyp62/IC/vKPiJ67OqDu3/vvRz3VOJj1Jc+m8x7NCMwEaADDBEAACH5BAkUAAkALAAAAABAAEAAAAT/MMlJq704683v+AMHhl1pDkEakBiqsmbsqe9o0yks7wkKALgUYUhwBX7AFY/3Sf2CqqIzmVvKjE5okJrTWTNYrRiH8n4r4bGaZj5LUIf4gcY9iuVzpRsdOCD+CHl2dFp+gHNtX3CAgYRZhYx5iUwqeFtPY5ZVe29rnmMDBZxpn6UDBgWiZ6Sla0UGsKpWrK1jr7CoVgW0tVq3uLIxBQa8vThDpwLKsTLDqMXGAUQDytW5JsPVBQTRQUTTBtXWwRvZ2kTRRKnr7OLL5Bjm4iC1NgXu+OLX5eHzL6ZkPuTDty+DPGVhoK0QA2LgOH7+yHiCJnBgwQsH0yhUuMLhxQoZ/4Ns/ETNIjwKIdkAnGhSQ0ZuQjiugKmmJMGTE15OqzfElk13H1H2qzYAWYFeH9AdK9LS4FCi1I4aS/ptmkecEg6Kkxptl42KTeM93dotxT2H+YLmHHpWANeyqQbGfehyKKpUZYOwYwdLH9a1y4rSzOvtlj61QnEVJSwGWd9liEEqZuwTl+W/iWV2+wVMGDHKtn6l2rELdOMi62aZ9lXEjeZ0rVethoLM9ezCk0q8NlZb9m0avRX9Bp5b9+DbsVcdX51c+XLQzRUpnR1dek/qxU98m/2BU4+qz7tl1w5+t5bx5Ks2yYveOHhkX+PTat9B8Pvs871PsP8NPSn66QWnGwoZ+llgAxMj7BABACH5BAkUAAkALAAAAABAAEAAAAT/MMlJq7046827/2A3jANHlmF6DUEboBjrwqoqu++p4y1dgywAgNciGAk34fD1C41aQqILCV32mp8bVEq09nzYFXc8ZoHDEy15zTujWYf4AecN1HHyORNNgSP+CHp2PHctB4CBe3wSfoCCg1tch45Xizd5XVFkmD0FBXxqbKJtBp5hoaOjSAasn02oqWyrrKU/BbCxZLO0riEFBri5UkYDBgLHrb6tBMKiRwPH0bUfv9EFzM1ER9vQ0ci9HNXWR9lHnufo3t8d4tEnuToF6vPe0xvtxzfBbW0j9PP2MuAToGZfjzL+/q3TgC+UwRdsEtILeKEhkYcPXyikWMEiv4ij/7pNBGfB44xUGUWq40ihIbYAVEK+JKOyHsmOxtxxg2dEV01pN1vm1ImkgLAR5HgQ+8dywkCC0Iw2Q7rt2cagToeqk5rtlg6JIxlq9ca1q0KmWCW0k3esbLYAnv7FBXpvaClPb6WgQ8fKZricrAbMzKutWF9pTYXSEkzYp2HEaXEGbrxmF63EkoFR9nk5GTXNm8dYNuUrY15i536YfkvsVGjRSFy/HhYby+pytV/Npu0GyG5tuVX/VtobyODdwVUff51c+fLNzWsI7vk7uvSks63b2LZ7hKWqz7MVTzG96u0yixiBR3L+YvoE5cF/nf+Ey3jy61ubQP8+/rMsUtx3HQ03TrTxXgU62HBCChEAADs=">
   <img id="spr-wr" class="gif-spr" src="data:image/gif;base64,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">
@@ -319,16 +320,14 @@ html:not(.app-ready) .menu-credits{animation:fade-up .8s ease .75s both}
   <img id="m8i" class="gif-spr"><img id="m8w" class="gif-spr">
   <img id="m9i" class="gif-spr"><img id="m9w" class="gif-spr">
   <img id="boss-i" class="gif-spr"><img id="boss-w" class="gif-spr">
-  <!-- HUD: vidas, fase atual, pontuacao -->
   <div id="hud">
-    <div id="hud-lives-wrap"><div class="hud-label">VIDAS</div><div id="hud-lives"></div></div>
+    <div id="hud-lives-wrap"><div class="hud-label" id="hud-label-lives">VIDAS</div><div id="hud-lives"></div></div>
     <div id="hud-phase-wrap"><div id="hud-phase">FASE 1 — CORPO HUMANO</div></div>
-    <div id="hud-score-wrap"><div class="hud-label">PONTOS</div><div id="hud-score">0</div></div>
+    <div id="hud-score-wrap"><div class="hud-label" id="hud-label-score">PONTOS</div><div id="hud-score">0</div></div>
   </div>
   <div id="prog-wrap"><div id="prog-bar"></div></div>
   <div id="score-popup"></div>
 
-  <!-- Aviso: ainda ha perguntas pendentes -->
   <div id="quiz-warning">
     <div id="quiz-warning-inner">
       <div id="quiz-warning-icon">⚠️</div>
@@ -337,13 +336,12 @@ html:not(.app-ready) .menu-credits{animation:fade-up .8s ease .75s both}
       <div id="quiz-warning-count"></div>
     </div>
   </div>
-  <!-- Quiz educativo (pausa o jogo) -->
   <div id="quiz-overlay">
     <div class="quiz-card">
       <div class="quiz-header">
         <div class="quiz-icon">🔬</div>
         <div class="quiz-header-text">
-          <div class="quiz-label">Desafio Científico</div>
+          <div class="quiz-label" id="quiz-label">Desafio Científico</div>
           <div class="quiz-title" id="quiz-phase-name">Corpo Humano</div>
         </div>
       </div>
@@ -356,7 +354,6 @@ html:not(.app-ready) .menu-credits{animation:fade-up .8s ease .75s both}
       <div class="quiz-fb" id="quiz-fb"></div>
     </div>
   </div>
-  <!-- Transicao entre fases -->
   <div id="phase-trans">
     <canvas id="trans-canvas"></canvas>
     <div class="trans-content">
@@ -367,7 +364,6 @@ html:not(.app-ready) .menu-credits{animation:fade-up .8s ease .75s both}
     </div>
   </div>
 
-  <!-- Controles touch: aparecem apenas em telas sensiveis ao toque (ver IS_TOUCH no JS) -->
   <div class="mobile-controls" id="mobile-controls">
     <div class="mc-dpad">
       <button class="mc-btn mc-left" id="btn-left" type="button" aria-label="Mover para a esquerda"><span class="mc-arrow"></span></button>
@@ -377,43 +373,37 @@ html:not(.app-ready) .menu-credits{animation:fade-up .8s ease .75s both}
   </div>
 </div>
 
-<!-- ============================================================
-     TELA: GAME OVER
-     ============================================================ -->
 <div id="screen-gameover" class="screen">
   <canvas id="go-canvas"></canvas>
   <div class="go-content">
     <span class="go-skull">💀</span>
     <div class="go-title">GAME OVER</div>
-    <div class="go-sub">Você perdeu todas as suas vidas...</div>
+    <div class="go-sub" id="go-sub">Você perdeu todas as suas vidas...</div>
     <div class="go-score" id="go-score">Pontuação: 0</div>
     <div class="go-divider"></div>
     <div class="go-btns">
-      <button class="mbtn mbtn-primary" style="padding:14px 32px" onclick="startGame()">Tentar novamente</button>
-      <button class="mbtn mbtn-secondary" style="padding:14px 32px" onclick="showScreen('screen-menu')">Menu</button>
+      <button class="mbtn mbtn-primary" style="padding:14px 32px" id="btn-retry" onclick="startGame()">Tentar novamente</button>
+      <button class="mbtn mbtn-secondary" style="padding:14px 32px" id="btn-menu-go" onclick="showScreen('screen-menu')">Menu</button>
     </div>
-    <div class="go-hint">Pressione <span class="key">R</span> para reiniciar rapidamente</div>
+    <div class="go-hint" id="go-hint">Pressione <span class="key">R</span> para reiniciar rapidamente</div>
   </div>
 </div>
 
-<!-- ============================================================
-     TELA: VITORIA
-     ============================================================ -->
 <div id="screen-victory" class="screen">
   <canvas id="win-canvas"></canvas>
   <div class="win-content">
     <span class="win-trophy">🏆</span>
-    <div class="win-title">VITÓRIA!</div>
+    <div class="win-title" id="win-title">VITÓRIA!</div>
     <div class="win-score" id="win-score">Pontuação: 0</div>
-    <div class="win-creds">
+    <div class="win-creds" id="win-creds">
       Jogo criado para a <strong>Culminância Escolar 2026</strong><br>
       Tema: <strong>Tecnologia na Biologia</strong><br>
       Alunos: <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong><br>
       Professor: <strong>Carlos</strong>
     </div>
     <div class="win-btns">
-      <button class="mbtn mbtn-primary" style="padding:14px 32px" onclick="startGame()">Jogar novamente</button>
-      <button class="mbtn mbtn-secondary" style="padding:14px 32px" onclick="showScreen('screen-menu')">Menu</button>
+      <button class="mbtn mbtn-primary" style="padding:14px 32px" id="btn-play-again" onclick="startGame()">Jogar novamente</button>
+      <button class="mbtn mbtn-secondary" style="padding:14px 32px" id="btn-menu-win" onclick="showScreen('screen-menu')">Menu</button>
     </div>
   </div>
 </div>
@@ -532,7 +522,8 @@ let QDB={1:[],2:[],3:[]};
 let usedQ={1:new Set(),2:new Set(),3:new Set()};
 function resetQDB(){
   usedQ={1:new Set(),2:new Set(),3:new Set()};
-  QDB={1:shuffleArr(QDB_ALL[1]),2:shuffleArr(QDB_ALL[2]),3:shuffleArr(QDB_ALL[3])};
+  const db=(typeof QDB_LANGS!=='undefined'&&QDB_LANGS[LANG])||QDB_ALL;
+  QDB={1:shuffleArr(db[1]),2:shuffleArr(db[2]),3:shuffleArr(db[3])};
 }
 function getNextQuestion(ph){
   const pool=QDB[ph], used=usedQ[ph];
@@ -563,12 +554,13 @@ function showScreen(id,cb){
 function showInfo(t){
   showScreen('screen-info',()=>{
     if(t==='inst'){
-      document.getElementById('info-title').textContent='INSTRUÇÕES';
-      document.getElementById('info-body').innerHTML='<ul><li>Use <span class="key">← →</span> ou <span class="key">A D</span> para mover</li><li>Use <span class="key">ESPAÇO</span> ou <span class="key">↑</span> para pular</li><li>Desvie dos inimigos e projéteis</li><li>Colete os <strong style="color:#00ffaa">❓</strong> para responder quizzes e ganhar pontos</li><li>⚠️ Você deve responder <strong style="color:#ffdd44">TODAS as perguntas</strong> da fase antes de avançar!</li><li>Complete as 3 fases para vencer o jogo!</li></ul><br><ul><li>🫀 Fase 1 — Corpo Humano (20 perguntas)</li><li>🦕 Fase 2 — Evolução das Espécies (20 perguntas)</li><li>⚗️ Fase 3 — Boss Final: Tecnologia e Biologia (15 perguntas)</li></ul>';
-    } else {
-      document.getElementById('info-title').textContent='CRÉDITOS';
-      document.getElementById('info-body').innerHTML='<div class="credits-block">Jogo criado para a <span class="hi">Culminância Escolar 2026</span><br>Tema: <span class="hi">Tecnologia na Biologia</span><br><br>Alunos: <span class="hi">Leandro</span>, <span class="hi">Everton</span>, <span class="hi">Bianca</span> &amp; <span class="hi">Vicente</span><br>Professor: <span class="hi">Carlos</span></div>';
+      document.getElementById('info-title').textContent=T('info_title_inst');
+      document.getElementById('info-body').innerHTML=T('info_body_inst');
+    }else{
+      document.getElementById('info-title').textContent=T('info_title_cred');
+      document.getElementById('info-body').innerHTML=T('info_body_cred');
     }
+    const bb=document.getElementById('btn-back');if(bb)bb.textContent=T('btn_back');
   });
 }
 
@@ -935,7 +927,7 @@ function damage(){
 function burst(x,y,col,n){for(let i=0;i<n;i++) G.particles.push({x,y,col,vx:(Math.random()-.5)*9,vy:(Math.random()-.5)*9-3,r:2+Math.random()*5,life:20+Math.random()*25});}
 
 let qTimer=null,qCB=null,qTimerCount=null;
-const phaseNames=['','Corpo Humano','Evolução','Tecnologia'];
+let phaseNames=['','Corpo Humano','Evolução','Tecnologia'];
 const quizIcons=['','🫀','🦕','⚗️'];
 function openQuiz(qi,ph,cb){
   if(G.paused) return;
@@ -973,12 +965,12 @@ function answerQuiz(chosen,correct,el){
   el.querySelectorAll('.qopt').forEach((b,i)=>{b.style.pointerEvents='none';if(i===correct)b.classList.add('ok');else if(i===chosen)b.classList.add('bad');});
   const fb=document.getElementById('quiz-fb');
   if(chosen===correct){
-    fb.textContent='✅ Correto! +100 pontos';fb.className='quiz-fb ok';
+    fb.textContent=T('quiz_correct');fb.className='quiz-fb ok';
     G.score+=100;sfx('ok');
     burst(G.W/2,G.H/2,'#00ff88',30);
     G.floatTexts.push({text:'+100',x:G.player.x+G.player.w/2,y:G.player.y-20,col:'#00ff88',life:70,maxLife:70});
   }else{
-    fb.textContent=chosen===-1?'⏱ Tempo esgotado! −1 vida':'❌ Errado! −1 vida';
+    fb.textContent=chosen===-1?T('quiz_timeout'):T('quiz_wrong');
     fb.className='quiz-fb bad';sfx('fail');
     G.lives=Math.max(0,G.lives-1);updateHUD();
   }
@@ -992,7 +984,7 @@ function answerQuiz(chosen,correct,el){
   },2000);
 }
 
-const PINFO=[null,{icon:'🫀',name:'Corpo Humano'},{icon:'🦕',name:'Evolução das Espécies'},{icon:'⚗️',name:'Tecnologia e Biologia'}];
+let PINFO=[null,{icon:'🫀',name:'Corpo Humano'},{icon:'🦕',name:'Evolução das Espécies'},{icon:'⚗️',name:'Tecnologia e Biologia'}];
 function nextPhase(){
   if(G.transitioning||G.over) return;
   G.transitioning=true;
@@ -1001,7 +993,7 @@ function nextPhase(){
   const next=G.phase+1,info=PINFO[next];
   document.getElementById('trans-icon').textContent=info.icon;
   document.getElementById('trans-name').textContent=info.name;
-  document.getElementById('trans-label').textContent='FASE '+next;
+  document.getElementById('trans-label').textContent=T('phase_label')+next;
   document.getElementById('phase-trans').classList.add('on');
   initTransCanvas();
   const fill=document.getElementById('trans-fill');fill.style.width='0%';
@@ -1018,19 +1010,19 @@ function nextPhase(){
 function updateHUD(){
   const el=document.getElementById('hud-lives');el.innerHTML='';
   for(let i=0;i<3;i++){const h=document.createElement('span');h.className='heart'+(i>=G.lives?' lost':'');h.textContent='❤️';el.appendChild(h);}
-  const names=['','FASE 1 — CORPO HUMANO','FASE 2 — EVOLUÇÃO','FASE 3 — BOSS FINAL'];
+  const names=['',T('hud_phase1'),T('hud_phase2'),T('hud_phase3')];
   document.getElementById('hud-phase').textContent=names[G.phase]||'';
   document.getElementById('screen-game').dataset.phase=G.phase;
 }
 
 function gameOver(){
   G.over=true;stopMusic();sfx('gameover');hideWarning();
-  document.getElementById('go-score').textContent='Pontuação: '+Math.floor(G.score);
+  document.getElementById('go-score').textContent=T('score_label')+Math.floor(G.score);
   setTimeout(()=>showScreen('screen-gameover'),900);
 }
 function victory(){
   G.over=true;stopMusic();sfx('victory');hideWarning();
-  document.getElementById('win-score').textContent='Pontuação: '+Math.floor(G.score);
+  document.getElementById('win-score').textContent=T('score_label')+Math.floor(G.score);
   setTimeout(()=>showScreen('screen-victory'),900);
 }
 document.addEventListener('keydown',e=>{if(e.code==='KeyR'&&document.getElementById('screen-gameover').classList.contains('active'))startGame();});
@@ -1353,6 +1345,67 @@ window.addEventListener('resize',()=>{
   init();draw();
   startMusic('menu');
 })();
+
+let LANG='pt';
+const LANGS={
+pt:{eyebrow:'Culminância Escolar · 2026',tagline:'Uma jornada interativa pelo <strong>corpo humano</strong>, a <strong>evolução da vida</strong> e os limites da <strong>tecnologia</strong>.',pc1:'Corpo Humano',pc2:'Evolução',pc3:'Tecnologia',play:'Jogar agora',inst:'Instruções',cred:'Créditos',credits:'Criado por <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong> — Prof. <strong>Carlos</strong>',lives:'VIDAS',score:'PONTOS',hud_phase1:'FASE 1 — CORPO HUMANO',hud_phase2:'FASE 2 — EVOLUÇÃO',hud_phase3:'FASE 3 — BOSS FINAL',quiz_lbl:'Desafio Científico',qph1:'Corpo Humano',qph2:'Evolução',qph3:'Tecnologia',qcorrect:'✅ Correto! +100 pontos',qtimeout:'⏱ Tempo esgotado! −1 vida',qwrong:'❌ Errado! −1 vida',warn_t:'Responda todas as perguntas!',warn_s:'Colete todos os <strong>❓</strong> desta fase antes de avançar.',ph_lbl:'FASE ',pi1:'Corpo Humano',pi2:'Evolução das Espécies',pi3:'Tecnologia e Biologia',score_lbl:'Pontuação: ',go_sub:'Você perdeu todas as suas vidas...',retry:'Tentar novamente',menu:'Menu',go_hint:'Pressione <span class="key">R</span> para reiniciar rapidamente',win_t:'VITÓRIA!',win_c:'Jogo criado para a <strong>Culminância Escolar 2026</strong><br>Tema: <strong>Tecnologia na Biologia</strong><br>Alunos: <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong><br>Professor: <strong>Carlos</strong>',play_again:'Jogar novamente',back:'← Voltar',it:'INSTRUÇÕES',ic:'CRÉDITOS',ib:'<ul><li>Use <span class="key">← →</span> ou <span class="key">A D</span> para mover</li><li>Use <span class="key">ESPAÇO</span> ou <span class="key">↑</span> para pular</li><li>Desvie dos inimigos e projéteis</li><li>Colete os <strong style="color:#00ffaa">❓</strong> para quizzes e pontos</li><li>⚠️ Responda <strong style="color:#ffdd44">TODAS as perguntas</strong> antes de avançar!</li><li>Complete as 3 fases para vencer!</li></ul><br><ul><li>🫀 Fase 1 — Corpo Humano (20)</li><li>🦕 Fase 2 — Evolução (20)</li><li>⚗️ Fase 3 — Boss: Tecnologia (15)</li></ul>',ibc:'<div class="credits-block">Jogo criado para a <span class="hi">Culminância Escolar 2026</span><br>Tema: <span class="hi">Tecnologia na Biologia</span><br><br>Alunos: <span class="hi">Leandro</span>, <span class="hi">Everton</span>, <span class="hi">Bianca</span> &amp; <span class="hi">Vicente</span><br>Professor: <span class="hi">Carlos</span></div>',nxt:'PRÓXIMA FASE'},
+en:{eyebrow:'School Culmination · 2026',tagline:'An interactive journey through the <strong>human body</strong>, the <strong>evolution of life</strong> and the limits of <strong>technology</strong>.',pc1:'Human Body',pc2:'Evolution',pc3:'Technology',play:'Play now',inst:'Instructions',cred:'Credits',credits:'Created by <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong> — Prof. <strong>Carlos</strong>',lives:'LIVES',score:'POINTS',hud_phase1:'PHASE 1 — HUMAN BODY',hud_phase2:'PHASE 2 — EVOLUTION',hud_phase3:'PHASE 3 — FINAL BOSS',quiz_lbl:'Scientific Challenge',qph1:'Human Body',qph2:'Evolution',qph3:'Technology',qcorrect:'✅ Correct! +100 points',qtimeout:"⏱ Time's up! −1 life",qwrong:'❌ Wrong! −1 life',warn_t:'Answer all questions!',warn_s:'Collect all <strong>❓</strong> in this phase before advancing.',ph_lbl:'PHASE ',pi1:'Human Body',pi2:'Evolution of Species',pi3:'Technology & Biology',score_lbl:'Score: ',go_sub:'You lost all your lives...',retry:'Try again',menu:'Menu',go_hint:'Press <span class="key">R</span> to restart quickly',win_t:'VICTORY!',win_c:'Game created for <strong>School Culmination 2026</strong><br>Theme: <strong>Technology in Biology</strong><br>Students: <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong><br>Teacher: <strong>Carlos</strong>',play_again:'Play again',back:'← Back',it:'INSTRUCTIONS',ic:'CREDITS',ib:'<ul><li>Use <span class="key">← →</span> or <span class="key">A D</span> to move</li><li>Use <span class="key">SPACE</span> or <span class="key">↑</span> to jump</li><li>Avoid enemies and projectiles</li><li>Collect <strong style="color:#00ffaa">❓</strong> for quizzes and points</li><li>⚠️ Answer <strong style="color:#ffdd44">ALL questions</strong> before advancing!</li><li>Complete all 3 phases to win!</li></ul><br><ul><li>🫀 Phase 1 — Human Body (20)</li><li>🦕 Phase 2 — Evolution (20)</li><li>⚗️ Phase 3 — Boss: Technology (15)</li></ul>',ibc:'<div class="credits-block">Game created for <span class="hi">School Culmination 2026</span><br>Theme: <span class="hi">Technology in Biology</span><br><br>Students: <span class="hi">Leandro</span>, <span class="hi">Everton</span>, <span class="hi">Bianca</span> &amp; <span class="hi">Vicente</span><br>Teacher: <span class="hi">Carlos</span></div>',nxt:'NEXT PHASE'},
+es:{eyebrow:'Culminación Escolar · 2026',tagline:'Un viaje interactivo por el <strong>cuerpo humano</strong>, la <strong>evolución de la vida</strong> y los límites de la <strong>tecnología</strong>.',pc1:'Cuerpo Humano',pc2:'Evolución',pc3:'Tecnología',play:'Jugar ahora',inst:'Instrucciones',cred:'Créditos',credits:'Creado por <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong> — Prof. <strong>Carlos</strong>',lives:'VIDAS',score:'PUNTOS',hud_phase1:'FASE 1 — CUERPO HUMANO',hud_phase2:'FASE 2 — EVOLUCIÓN',hud_phase3:'FASE 3 — JEFE FINAL',quiz_lbl:'Desafío Científico',qph1:'Cuerpo Humano',qph2:'Evolución',qph3:'Tecnología',qcorrect:'✅ ¡Correcto! +100 puntos',qtimeout:'⏱ ¡Tiempo agotado! −1 vida',qwrong:'❌ ¡Incorrecto! −1 vida',warn_t:'¡Responde todas las preguntas!',warn_s:'Recoge todos los <strong>❓</strong> de esta fase antes de avanzar.',ph_lbl:'FASE ',pi1:'Cuerpo Humano',pi2:'Evolución de Especies',pi3:'Tecnología y Biología',score_lbl:'Puntuación: ',go_sub:'Perdiste todas tus vidas...',retry:'Intentar de nuevo',menu:'Menú',go_hint:'Presiona <span class="key">R</span> para reiniciar rápidamente',win_t:'¡VICTORIA!',win_c:'Juego creado para la <strong>Culminación Escolar 2026</strong><br>Tema: <strong>Tecnología en Biología</strong><br>Alumnos: <strong>Leandro</strong>, <strong>Everton</strong>, <strong>Bianca</strong> &amp; <strong>Vicente</strong><br>Profesor: <strong>Carlos</strong>',play_again:'Jugar de nuevo',back:'← Volver',it:'INSTRUCCIONES',ic:'CRÉDITOS',ib:'<ul><li>Usa <span class="key">← →</span> o <span class="key">A D</span> para mover</li><li>Usa <span class="key">ESPACIO</span> o <span class="key">↑</span> para saltar</li><li>Esquiva enemigos y proyectiles</li><li>Recoge <strong style="color:#00ffaa">❓</strong> para quizzes y puntos</li><li>⚠️ Responde <strong style="color:#ffdd44">TODAS las preguntas</strong> antes de avanzar!</li><li>¡Completa las 3 fases para ganar!</li></ul><br><ul><li>🫀 Fase 1 — Cuerpo Humano (20)</li><li>🦕 Fase 2 — Evolución (20)</li><li>⚗️ Fase 3 — Jefe: Tecnología (15)</li></ul>',ibc:'<div class="credits-block">Juego creado para la <span class="hi">Culminación Escolar 2026</span><br>Tema: <span class="hi">Tecnología en Biología</span><br><br>Alumnos: <span class="hi">Leandro</span>, <span class="hi">Everton</span>, <span class="hi">Bianca</span> &amp; <span class="hi">Vicente</span><br>Profesor: <span class="hi">Carlos</span></div>',nxt:'SIGUIENTE FASE'},
+ru:{eyebrow:'Школьная кульминация · 2026',tagline:'Интерактивное путешествие по <strong>телу человека</strong>, <strong>эволюции жизни</strong> и границам <strong>технологий</strong>.',pc1:'Тело человека',pc2:'Эволюция',pc3:'Технологии',play:'Играть',inst:'Инструкции',cred:'Авторы',credits:'Создано: <strong>Леандро</strong>, <strong>Эвертон</strong>, <strong>Бьянка</strong> &amp; <strong>Висенте</strong> — Проф. <strong>Карлос</strong>',lives:'ЖИЗНИ',score:'ОЧКИ',hud_phase1:'УР. 1 — ТЕЛО ЧЕЛОВЕКА',hud_phase2:'УР. 2 — ЭВОЛЮЦИЯ',hud_phase3:'УР. 3 — ФИНАЛЬНЫЙ БОСС',quiz_lbl:'Научное испытание',qph1:'Тело человека',qph2:'Эволюция',qph3:'Технологии',qcorrect:'✅ Правильно! +100 очков',qtimeout:'⏱ Время вышло! −1 жизнь',qwrong:'❌ Неверно! −1 жизнь',warn_t:'Ответьте на все вопросы!',warn_s:'Соберите все <strong>❓</strong> на этом уровне перед продвижением.',ph_lbl:'УР. ',pi1:'Тело человека',pi2:'Эволюция видов',pi3:'Технологии и биология',score_lbl:'Очки: ',go_sub:'Вы потеряли все жизни...',retry:'Попробовать снова',menu:'Меню',go_hint:'Нажмите <span class="key">R</span> для быстрого перезапуска',win_t:'ПОБЕДА!',win_c:'Игра создана для <strong>Школьной кульминации 2026</strong><br>Тема: <strong>Технологии в биологии</strong><br>Ученики: <strong>Леандро</strong>, <strong>Эвертон</strong>, <strong>Бьянка</strong> &amp; <strong>Висенте</strong><br>Учитель: <strong>Карлос</strong>',play_again:'Играть снова',back:'← Назад',it:'ИНСТРУКЦИИ',ic:'АВТОРЫ',ib:'<ul><li>Используйте <span class="key">← →</span> или <span class="key">A D</span> для движения</li><li>Используйте <span class="key">ПРОБЕЛ</span> или <span class="key">↑</span> для прыжка</li><li>Уклоняйтесь от врагов и снарядов</li><li>Собирайте <strong style="color:#00ffaa">❓</strong> для викторин и очков</li><li>⚠️ Ответьте на <strong style="color:#ffdd44">ВСЕ вопросы</strong> уровня!</li><li>Пройдите 3 уровня, чтобы победить!</li></ul><br><ul><li>🫀 Уровень 1 — Тело человека (20)</li><li>🦕 Уровень 2 — Эволюция (20)</li><li>⚗️ Уровень 3 — Босс: Технологии (15)</li></ul>',ibc:'<div class="credits-block">Игра создана для <span class="hi">Школьной кульминации 2026</span><br>Тема: <span class="hi">Технологии в биологии</span><br><br>Ученики: <span class="hi">Леандро</span>, <span class="hi">Эвертон</span>, <span class="hi">Бьянка</span> &amp; <span class="hi">Висенте</span><br>Учитель: <span class="hi">Карлос</span></div>',nxt:'СЛЕДУЮЩИЙ УРОВЕНЬ'}
+};
+const _KA={
+  'info_title_inst':'it','info_title_cred':'ic',
+  'info_body_inst':'ib','info_body_cred':'ibc',
+  'btn_back':'back','score_label':'score_lbl',
+  'phase_label':'ph_lbl','quiz_correct':'qcorrect',
+  'quiz_timeout':'qtimeout','quiz_wrong':'qwrong'
+};
+function T(k){const ak=_KA[k]||k;return(LANGS[LANG]&&(LANGS[LANG][ak]!==undefined)?LANGS[LANG][ak]:LANGS.pt[ak]!==undefined?LANGS.pt[ak]:k);}
+
+const QDB_LANGS={
+pt:null,
+en:{
+1:[{q:"What organ pumps blood throughout the body?",opts:["Liver","Kidney","Heart","Lung"],c:2},{q:"How many bones does the adult human skeleton have?",opts:["156","186","206","256"],c:2},{q:"What is the main function of the lungs?",opts:["Filter blood","Gas exchange (O₂/CO₂)","Produce hormones","Digest proteins"],c:1},{q:"What are antibodies?",opts:["Liver cells","Beneficial viruses","Immune system proteins","Digestive hormones"],c:2},{q:"What is the largest organ of the human body?",opts:["Liver","Brain","Intestine","Skin"],c:3},{q:"Which part of blood carries oxygen?",opts:["Platelets","Plasma","White blood cells","Red blood cells"],c:3},{q:"Where does protein digestion occur?",opts:["Large intestine","Esophagus","Stomach and small intestine","Liver"],c:2},{q:"Which organ produces bile for digestion?",opts:["Pancreas","Kidney","Liver","Stomach"],c:2},{q:"How many chambers does the human heart have?",opts:["1","2","3","4"],c:3},{q:"Which system is responsible for the body's defense?",opts:["Digestive","Nervous","Immune","Endocrine"],c:2},{q:"What is DNA?",opts:["A type of protein","The molecule carrying genetic information","A cellular lipid","A hormone"],c:1},{q:"What vitamin is produced by the skin in sunlight?",opts:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"],c:3},{q:"What does the central nervous system do?",opts:["Pump blood","Coordinate and control body functions","Produce hormones","Digest food"],c:1},{q:"Which organ filters blood and produces urine?",opts:["Liver","Lung","Kidney","Spleen"],c:2},{q:"What is the basic unit of life?",opts:["Atom","Molecule","Cell","Tissue"],c:2},{q:"Which muscle is responsible for breathing?",opts:["Biceps","Diaphragm","Quadriceps","Trapezius"],c:1},{q:"What produces insulin in the body?",opts:["Liver","Kidney","Pancreas","Stomach"],c:2},{q:"What is the function of platelets?",opts:["Carry oxygen","Fight infections","Clot blood","Produce hormones"],c:2},{q:"Where are the tonsils located?",opts:["In the stomach","In the throat","In the intestine","In the liver"],c:1},{q:"Which part of the nervous system controls involuntary actions?",opts:["Cerebellum","Autonomic nervous system","Spinal cord","Cerebral cortex"],c:1}],
+2:[{q:"Who proposed the Theory of Natural Selection?",opts:["Pasteur","Mendel","Darwin","Einstein"],c:2},{q:"What is a fossil?",opts:["Rare mineral","Preserved remains of ancient beings","Type of fungus","Volcanic rock"],c:1},{q:"What was the first type of life on Earth?",opts:["Fish","Plants","Dinosaurs","Bacteria/Prokaryotes"],c:3},{q:"What does natural selection mean?",opts:["Natural cloning","Random mutation","Human choice","The fittest survive"],c:3},{q:"How many years ago did dinosaurs go extinct?",opts:["6 million","66 million","166 million","6 billion"],c:1},{q:"What is genetic mutation?",opts:["Perfect DNA copy","Alteration in DNA sequence","Fusion of two organisms","Asexual reproduction"],c:1},{q:"How do plants produce their food?",opts:["Cellular respiration","Photosynthesis","Fermentation","Digestion"],c:1},{q:"Where do new species come from (Darwin)?",opts:["Divine creation","Mutations and natural selection over time","Spontaneous cloning","Scientific experiments"],c:1},{q:"What is evolutionary adaptation?",opts:["Environmental change","Characteristic increasing survival","A type of fossil","A genetic disease"],c:1},{q:"What was early Earth like?",opts:["Rich in oxygen","Cold and dry","Hot with little oxygen and volcanoes","Covered by forests"],c:2},{q:"What does Paleontology study?",opts:["Planets","Fossils and prehistoric beings","Genes","Rocks"],c:1},{q:"What generates genetic variability in a population?",opts:["Cloning","Photosynthesis","Sexual reproduction","Cellular respiration"],c:2},{q:"Who discovered inheritance laws through pea experiments?",opts:["Darwin","Pasteur","Gregor Mendel","Watson"],c:2},{q:"What are endemic species?",opts:["Extinct species","Species living only in one place","Migratory species","Cultivated species"],c:1},{q:"What is mass extinction?",opts:["Disappearance of one species","Loss of many species in short time","Migration of species","Emergence of new species"],c:1},{q:"What is genetic drift?",opts:["Purposeful mutation","Change in gene frequency by chance","Artificial selection","Asexual reproduction"],c:1},{q:"What caused the extinction of dinosaurs?",opts:["Global epidemic","Asteroid impact and climate change","Emergence of mammals","Submarine eruptions"],c:1},{q:"What is a unicellular organism?",opts:["Formed by many cells","Formed by a single cell","A fungus","A virus"],c:1},{q:"What is symbiosis?",opts:["Competition between species","Mutually beneficial relationship","Parasitism","Predation"],c:1},{q:"Which geological period has the greatest marine diversity?",opts:["Triassic","Cambrian","Cretaceous","Jurassic"],c:1}],
+3:[{q:"What is CRISPR technology?",opts:["Electron microscope","Genetic editing technology","Computer virus","Cloning method"],c:1},{q:"What does Bioinformatics study?",opts:["Robotics","Nuclear physics","Biological data with computers","Food engineering"],c:2},{q:"What is cloning?",opts:["Species fusion","Creating artificial organs","Viral modification","Identical genetic copy of a being"],c:3},{q:"What is genetic sequencing?",opts:["Ordering proteins","Determining DNA base order","Cloning organisms","Creating vaccines"],c:1},{q:"What technology creates organs with 3D printing?",opts:["3D Bioprinting","Cell cloning","CRISPR","Nanotechnology"],c:0},{q:"What are nanobots in medicine?",opts:["Giant robots","Advanced microscopes","Tiny devices that act in the body","AI chips"],c:2},{q:"What is personalized medicine?",opts:["Same treatment for everyone","Treatment based on genetic profile","Alternative medicine","Treatment without medication"],c:1},{q:"What is the role of AI in Biology?",opts:["Replace doctors","Analyze data and assist diagnoses","Create vaccines","Perform surgeries"],c:1},{q:"What is a bioreactor?",opts:["Biological computer","Equipment that cultivates cells","DNA sensor","Modified virus"],c:1},{q:"What is an mRNA vaccine?",opts:["Live virus vaccine","Vaccine with viral DNA","Vaccine that instructs cells to produce immunizing protein","Vaccine with ready antibodies"],c:2},{q:"What is gene therapy?",opts:["Treatment with herbs","Modifying genes to treat diseases","Organ transplant","Use of antibiotics"],c:1},{q:"What are stem cells?",opts:["Cancer cells","Cells that can differentiate into other types","Dead cells","Modified viruses"],c:1},{q:"What is the Human Genome Project?",opts:["A space program","Complete mapping of human DNA","Experiment with clones","Study of fossils"],c:1},{q:"What is telemedicine?",opts:["Phone medicine","Remote medical care with technology","Digital medications","Robotic surgery"],c:1},{q:"How does technology help combat epidemics?",opts:["It doesn't help","With models, tracking and accelerated vaccines","Only with medication","Only with quarantine"],c:1}]
+},
+es:{
+1:[{q:"¿Qué órgano bombea la sangre?",opts:["Hígado","Riñón","Corazón","Pulmón"],c:2},{q:"¿Cuántos huesos tiene el esqueleto adulto?",opts:["156","186","206","256"],c:2},{q:"¿Función principal de los pulmones?",opts:["Filtrar sangre","Intercambio gaseoso (O₂/CO₂)","Producir hormonas","Digerir proteínas"],c:1},{q:"¿Qué son los anticuerpos?",opts:["Células del hígado","Virus benéficos","Proteínas del sistema inmune","Hormonas digestivas"],c:2},{q:"¿El órgano más grande del cuerpo?",opts:["Hígado","Cerebro","Intestino","Piel"],c:3},{q:"¿Qué parte de la sangre transporta oxígeno?",opts:["Plaquetas","Plasma","Glóbulos blancos","Glóbulos rojos"],c:3},{q:"¿Dónde ocurre la digestión de proteínas?",opts:["Intestino grueso","Esófago","Estómago e intestino delgado","Hígado"],c:2},{q:"¿Qué órgano produce bilis?",opts:["Páncreas","Riñón","Hígado","Estómago"],c:2},{q:"¿Cuántas cámaras tiene el corazón?",opts:["1","2","3","4"],c:3},{q:"¿Qué sistema defiende el organismo?",opts:["Digestivo","Nervioso","Inmunológico","Endocrino"],c:2},{q:"¿Qué es el ADN?",opts:["Un tipo de proteína","La molécula de información genética","Un lípido celular","Una hormona"],c:1},{q:"¿Vitamina producida por la piel al sol?",opts:["Vitamina A","Vitamina B12","Vitamina C","Vitamina D"],c:3},{q:"¿Qué hace el sistema nervioso central?",opts:["Bombear sangre","Coordinar las funciones del cuerpo","Producir hormonas","Digerir alimentos"],c:1},{q:"¿Qué órgano filtra la sangre y produce orina?",opts:["Hígado","Pulmón","Riñón","Bazo"],c:2},{q:"¿Cuál es la unidad básica de vida?",opts:["Átomo","Molécula","Célula","Tejido"],c:2},{q:"¿Qué músculo responsable de la respiración?",opts:["Bíceps","Diafragma","Cuádriceps","Trapecio"],c:1},{q:"¿Qué produce la insulina?",opts:["Hígado","Riñón","Páncreas","Estómago"],c:2},{q:"¿Función de las plaquetas?",opts:["Transportar oxígeno","Combatir infecciones","Coagular la sangre","Producir hormonas"],c:2},{q:"¿Dónde están las amígdalas?",opts:["En el estómago","En la garganta","En el intestino","En el hígado"],c:1},{q:"¿Qué controla acciones involuntarias?",opts:["Cerebelo","Sistema nervioso autónomo","Médula espinal","Corteza cerebral"],c:1}],
+2:[{q:"¿Quién propuso la Selección Natural?",opts:["Pasteur","Mendel","Darwin","Einstein"],c:2},{q:"¿Qué es un fósil?",opts:["Mineral raro","Restos de seres antiguos","Tipo de hongo","Roca volcánica"],c:1},{q:"¿El primer ser vivo en la Tierra?",opts:["Peces","Plantas","Dinosaurios","Bacterias/Procariontes"],c:3},{q:"¿Qué significa selección natural?",opts:["Clonación natural","Mutación aleatoria","Elección humana","Los más adaptados sobreviven"],c:3},{q:"¿Hace cuántos años se extinguieron los dinosaurios?",opts:["6 millones","66 millones","166 millones","6 mil millones"],c:1},{q:"¿Qué es una mutación genética?",opts:["Copia perfecta del ADN","Alteración en el ADN","Fusión de organismos","Reproducción asexual"],c:1},{q:"¿Cómo producen alimento las plantas?",opts:["Respiración celular","Fotosíntesis","Fermentación","Digestión"],c:1},{q:"¿Origen de nuevas especies (Darwin)?",opts:["Creación divina","Mutaciones y selección natural","Clonación espontánea","Experimentos científicos"],c:1},{q:"¿Qué es la adaptación evolutiva?",opts:["Cambio ambiental","Característica que aumenta la supervivencia","Un fósil","Una enfermedad genética"],c:1},{q:"¿Cómo era la Tierra en sus primeros miles de millones de años?",opts:["Rica en oxígeno","Fría y seca","Caliente con poco oxígeno y volcanes","Cubierta de bosques"],c:2},{q:"¿Qué estudia la Paleontología?",opts:["Planetas","Fósiles y seres prehistóricos","Genes","Rocas"],c:1},{q:"¿Qué genera variabilidad genética?",opts:["Clonación","Fotosíntesis","Reproducción sexual","Respiración celular"],c:2},{q:"¿Quién descubrió las leyes de herencia con guisantes?",opts:["Darwin","Pasteur","Gregor Mendel","Watson"],c:2},{q:"¿Qué son las especies endémicas?",opts:["Extintas","Solo viven en un lugar","Migratorias","Cultivadas"],c:1},{q:"¿Qué es la extinción masiva?",opts:["Desaparición de una especie","Pérdida de muchas en poco tiempo","Migración de especies","Surgimiento de nuevas especies"],c:1},{q:"¿Qué es la deriva genética?",opts:["Mutación intencional","Cambio de frecuencia genética por azar","Selección artificial","Reproducción asexual"],c:1},{q:"¿Qué causó la extinción de dinosaurios?",opts:["Epidemia global","Asteroide y cambios climáticos","Surgimiento de mamíferos","Erupciones submarinas"],c:1},{q:"¿Qué es un organismo unicelular?",opts:["Muchas células","Una sola célula","Un hongo","Un virus"],c:1},{q:"¿Qué es la simbiosis?",opts:["Competencia","Beneficio mutuo entre especies","Parasitismo","Depredación"],c:1},{q:"¿Período geológico con mayor diversidad marina?",opts:["Triásico","Cámbrico","Cretácico","Jurásico"],c:1}],
+3:[{q:"¿Qué es CRISPR?",opts:["Microscopio electrónico","Tecnología de edición genética","Virus informático","Clonación"],c:1},{q:"¿Qué estudia la Bioinformática?",opts:["Robótica","Física nuclear","Datos biológicos con computadoras","Ingeniería de alimentos"],c:2},{q:"¿Qué es la clonación?",opts:["Fusión de especies","Crear órganos artificiales","Modificación viral","Copia genética idéntica"],c:3},{q:"¿Qué es el secuenciamiento genético?",opts:["Ordenar proteínas","Determinar el orden del ADN","Clonar organismos","Crear vacunas"],c:1},{q:"¿Tecnología para crear órganos con impresión 3D?",opts:["Bioimpresión 3D","Clonación celular","CRISPR","Nanotecnología"],c:0},{q:"¿Qué son los nanobots?",opts:["Robots gigantes","Microscopios","Dispositivos diminutos en el cuerpo","Chips de IA"],c:2},{q:"¿Qué es la medicina personalizada?",opts:["Tratamiento igual para todos","Basado en el perfil genético","Medicina alternativa","Sin medicamentos"],c:1},{q:"¿Papel de la IA en Biología?",opts:["Reemplazar médicos","Analizar datos y ayudar diagnósticos","Crear vacunas","Realizar cirugías"],c:1},{q:"¿Qué es un biorreactor?",opts:["Computadora biológica","Cultivo de células controlado","Sensor de ADN","Virus modificado"],c:1},{q:"¿Qué es una vacuna de ARNm?",opts:["Virus vivo","Fragmentos de ADN viral","Instruye células a producir proteína","Anticuerpos listos"],c:2},{q:"¿Qué es la terapia génica?",opts:["Tratamiento con hierbas","Modificar genes para tratar enfermedades","Trasplante de órganos","Antibióticos"],c:1},{q:"¿Qué son las células madre?",opts:["Cancerígenas","Se diferencian en otros tipos","Muertas","Virus modificados"],c:1},{q:"¿Qué es el Proyecto Genoma Humano?",opts:["Programa espacial","Mapeo del ADN humano","Experimento con clones","Estudio de fósiles"],c:1},{q:"¿Qué es la telemedicina?",opts:["Medicina por teléfono","Atención médica a distancia","Medicamentos digitales","Cirugía robótica"],c:1},{q:"¿Cómo ayuda la tecnología a combatir epidemias?",opts:["No ayuda","Con modelos, rastreo y vacunas","Solo medicamentos","Solo cuarentena"],c:1}]
+},
+ru:{
+1:[{q:"Какой орган перекачивает кровь?",opts:["Печень","Почка","Сердце","Лёгкое"],c:2},{q:"Сколько костей у взрослого человека?",opts:["156","186","206","256"],c:2},{q:"Основная функция лёгких?",opts:["Фильтрация крови","Газообмен (O₂/CO₂)","Выработка гормонов","Переваривание белков"],c:1},{q:"Что такое антитела?",opts:["Клетки печени","Полезные вирусы","Белки иммунной системы","Гормоны пищеварения"],c:2},{q:"Самый большой орган тела?",opts:["Печень","Мозг","Кишечник","Кожа"],c:3},{q:"Какая часть крови переносит кислород?",opts:["Тромбоциты","Плазма","Лейкоциты","Эритроциты"],c:3},{q:"Где перевариваются белки?",opts:["Толстый кишечник","Пищевод","Желудок и тонкий кишечник","Печень"],c:2},{q:"Какой орган вырабатывает желчь?",opts:["Поджелудочная железа","Почка","Печень","Желудок"],c:2},{q:"Сколько камер в сердце?",opts:["1","2","3","4"],c:3},{q:"Какая система отвечает за защиту организма?",opts:["Пищеварительная","Нервная","Иммунная","Эндокринная"],c:2},{q:"Что такое ДНК?",opts:["Вид белка","Молекула генетической информации","Клеточный липид","Гормон"],c:1},{q:"Какой витамин вырабатывает кожа на солнце?",opts:["Витамин A","Витамин B12","Витамин C","Витамин D"],c:3},{q:"Что делает ЦНС?",opts:["Перекачивает кровь","Координирует функции тела","Вырабатывает гормоны","Переваривает пищу"],c:1},{q:"Какой орган фильтрует кровь и вырабатывает мочу?",opts:["Печень","Лёгкое","Почка","Селезёнка"],c:2},{q:"Основная единица жизни?",opts:["Атом","Молекула","Клетка","Ткань"],c:2},{q:"Какая мышца отвечает за дыхание?",opts:["Бицепс","Диафрагма","Квадрицепс","Трапеция"],c:1},{q:"Что вырабатывает инсулин?",opts:["Печень","Почка","Поджелудочная железа","Желудок"],c:2},{q:"Функция тромбоцитов?",opts:["Переносить кислород","Бороться с инфекциями","Свёртывать кровь","Вырабатывать гормоны"],c:2},{q:"Где находятся миндалины?",opts:["В желудке","В горле","В кишечнике","В печени"],c:1},{q:"Что контролирует непроизвольные действия?",opts:["Мозжечок","Вегетативная НС","Спинной мозг","Кора головного мозга"],c:1}],
+2:[{q:"Кто предложил теорию естественного отбора?",opts:["Пастер","Мендель","Дарвин","Эйнштейн"],c:2},{q:"Что такое ископаемое?",opts:["Редкий минерал","Останки древних существ","Вид гриба","Вулканическая порода"],c:1},{q:"Первые живые существа на Земле?",opts:["Рыбы","Растения","Динозавры","Бактерии/Прокариоты"],c:3},{q:"Что такое естественный отбор?",opts:["Естественное клонирование","Случайная мутация","Выбор человека","Выживают наиболее приспособленные"],c:3},{q:"Сколько лет назад вымерли динозавры?",opts:["6 млн","66 млн","166 млн","6 млрд"],c:1},{q:"Что такое генетическая мутация?",opts:["Идеальная копия ДНК","Изменение последовательности ДНК","Слияние организмов","Бесполое размножение"],c:1},{q:"Как растения производят пищу?",opts:["Клеточное дыхание","Фотосинтез","Брожение","Пищеварение"],c:1},{q:"Откуда новые виды (Дарвин)?",opts:["Божественное творение","Мутации и естественный отбор","Спонтанное клонирование","Научные эксперименты"],c:1},{q:"Что такое эволюционная адаптация?",opts:["Изменение среды","Признак повышающий выживаемость","Вид ископаемого","Генетическая болезнь"],c:1},{q:"Какой была ранняя Земля?",opts:["Богатая кислородом","Холодная и сухая","Жаркая с вулканами и мало O₂","Покрытая лесами"],c:2},{q:"Что изучает палеонтология?",opts:["Планеты","Ископаемые и доисторические существа","Гены","Горные породы"],c:1},{q:"Что создаёт генетическую изменчивость?",opts:["Клонирование","Фотосинтез","Половое размножение","Клеточное дыхание"],c:2},{q:"Кто открыл законы наследования с горохом?",opts:["Дарвин","Пастер","Грегор Мендель","Уотсон"],c:2},{q:"Что такое эндемичные виды?",opts:["Вымершие","Живущие только в одном месте","Мигрирующие","Культивируемые"],c:1},{q:"Что такое массовое вымирание?",opts:["Исчезновение одного вида","Потеря многих видов за короткое время","Миграция видов","Появление новых видов"],c:1},{q:"Что такое генетический дрейф?",opts:["Целенаправленная мутация","Случайное изменение частоты генов","Искусственный отбор","Бесполое размножение"],c:1},{q:"Что привело к вымиранию динозавров?",opts:["Глобальная эпидемия","Астероид и изменение климата","Появление млекопитающих","Подводные извержения"],c:1},{q:"Что такое одноклеточный организм?",opts:["Состоит из многих клеток","Состоит из одной клетки","Гриб","Вирус"],c:1},{q:"Что такое симбиоз?",opts:["Конкуренция видов","Взаимовыгодные отношения","Паразитизм","Хищничество"],c:1},{q:"Какой период имеет наибольшее морское разнообразие?",opts:["Триасовый","Кембрийский","Меловой","Юрский"],c:1}],
+3:[{q:"Что такое технология CRISPR?",opts:["Электронный микроскоп","Редактирование генов","Компьютерный вирус","Клонирование"],c:1},{q:"Что изучает биоинформатика?",opts:["Робототехника","Ядерная физика","Биоданные с компьютерами","Пищевая инженерия"],c:2},{q:"Что такое клонирование?",opts:["Слияние видов","Создание искусственных органов","Вирусная модификация","Идентичная генетическая копия"],c:3},{q:"Что такое генетическое секвенирование?",opts:["Упорядочение белков","Определение порядка оснований ДНК","Клонирование организмов","Создание вакцин"],c:1},{q:"Технология для создания органов 3D-печатью?",opts:["3D-биопечать","Клеточное клонирование","CRISPR","Нанотехнология"],c:0},{q:"Что такое наноботы в медицине?",opts:["Гигантские роботы","Продвинутые микроскопы","Устройства в теле","Чипы ИИ"],c:2},{q:"Что такое персонализированная медицина?",opts:["Одинаковое лечение","Лечение по генетическому профилю","Альтернативная медицина","Без лекарств"],c:1},{q:"Роль ИИ в биологии?",opts:["Заменить врачей","Анализировать данные и диагностировать","Создавать вакцины","Проводить операции"],c:1},{q:"Что такое биореактор?",opts:["Биологический компьютер","Культивирование клеток","Датчик ДНК","Модифицированный вирус"],c:1},{q:"Что такое мРНК-вакцина?",opts:["Живой вирус","Фрагменты вирусной ДНК","Инструктирует клетки производить белок","Готовые антитела"],c:2},{q:"Что такое генная терапия?",opts:["Лечение травами","Изменение генов для лечения","Трансплантация органов","Антибиотики"],c:1},{q:"Что такое стволовые клетки?",opts:["Раковые клетки","Могут дифференцироваться в другие типы","Мёртвые клетки","Модифицированные вирусы"],c:1},{q:"Что такое Проект Геном человека?",opts:["Космическая программа","Полное картирование ДНК","Эксперимент с клонами","Изучение ископаемых"],c:1},{q:"Что такое телемедицина?",opts:["Медицина по телефону","Дистанционная помощь","Цифровые лекарства","Роботизированная хирургия"],c:1},{q:"Как технология помогает бороться с эпидемиями?",opts:["Не помогает","Модели, отслеживание, вакцины","Только лекарствами","Только карантином"],c:1}]
+}
+};
+QDB_LANGS.pt=QDB_ALL;
+
+function setLanguage(lang){
+  LANG=lang;
+  ['pt','en','es','ru'].forEach(l=>{const b=document.getElementById('lang-'+l);if(b)b.classList.toggle('active',l===lang);});
+  phaseNames[1]=T('qph1');phaseNames[2]=T('qph2');phaseNames[3]=T('qph3');
+  PINFO[1]={icon:'🫀',name:T('pi1')};PINFO[2]={icon:'🦕',name:T('pi2')};PINFO[3]={icon:'⚗️',name:T('pi3')};
+  applyI18N();
+}
+function applyI18N(){
+  const setT=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  const setH=(id,v)=>{const e=document.getElementById(id);if(e)e.innerHTML=v;};
+  setT('menu-eyebrow',T('eyebrow'));
+  setH('menu-tagline',T('tagline'));
+  setT('pc-name-1',T('pc1'));setT('pc-name-2',T('pc2'));setT('pc-name-3',T('pc3'));
+  setT('btn-play',T('play'));setT('btn-inst',T('inst'));setT('btn-cred',T('cred'));
+  setH('menu-credits',T('credits'));
+  setT('hud-label-lives',T('lives'));setT('hud-label-score',T('score'));
+  setT('quiz-label',T('quiz_lbl'));
+  setT('quiz-warning-title',T('warn_t'));setH('quiz-warning-sub',T('warn_s'));
+  setT('go-sub',T('go_sub'));setT('btn-retry',T('retry'));setT('btn-menu-go',T('menu'));
+  setH('go-hint',T('go_hint'));
+  setT('win-title',T('win_t'));setH('win-creds',T('win_c'));
+  setT('btn-play-again',T('play_again'));setT('btn-menu-win',T('menu'));
+  setT('btn-back',T('back'));
+}
 </script>
 </body>
 </html>
